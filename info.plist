@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>com.maxxton</string>
+	<key>connections</key>
+	<dict>
+		<key>0780DDAB-DA00-4FC1-9455-5B61A8A3046B</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>977D9DF6-D4C5-48E2-A9C1-6A3FB12344BF</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>43FAF244-BA04-4A7A-BC57-37F994B64970</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>7686C74A-A33F-49C2-8231-40F1569A481A</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>7686C74A-A33F-49C2-8231-40F1569A481A</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>09B2D77C-A000-4BCD-A8FC-2944075CF179</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>BAFF0BFF-A9A3-44F2-8271-20992129D2AF</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>0780DDAB-DA00-4FC1-9455-5B61A8A3046B</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>Rob Sonke</string>
+	<key>description</key>
+	<string>by Rob</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>Start/stop tomcats</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>keyword</key>
+				<string>start</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>loading</string>
+				<key>script</key>
+				<string>cat&lt;&lt;EOB
+&lt;items&gt;
+  &lt;item uid="book" arg="book" autocomplete="book" type="default"&gt;
+    &lt;title&gt;book&lt;/title&gt;
+  &lt;/item&gt;
+  &lt;item uid="services" arg="services" autocomplete="services" type="default"&gt;
+    &lt;title&gt;services&lt;/title&gt;
+  &lt;/item&gt;
+  &lt;item uid="portal" arg="portal" autocomplete="portal" type="default"&gt;
+    &lt;title&gt;portal&lt;/title&gt;
+  &lt;/item&gt;
+&lt;/items&gt;
+EOB</string>
+				<key>title</key>
+				<string>Start one of my tomcats</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>43FAF244-BA04-4A7A-BC57-37F994B64970</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>applescript</key>
+				<string>on alfred_script(q)
+    tell application "iTerm"
+        activate
+        
+            tell the first terminal
+            launch session "Default"
+    
+			tell the last session
+				set name to q
+
+                 if ((q as string) is equal to "services")
+                    write text "cd ~/maxxton/tomcats/tomcat7-services/bin"
+                 end if
+                 if ((q as string) is equal to "book")
+                    write text "cd ~/maxxton/tomcats/tomcat7-book/bin"
+                 end if
+                 if ((q as string) is equal to "portal")
+                   write text "cd ~/maxxton/tomcats/liferay-portal-6.2-ce-ga3/tomcat-7.0.42/bin"
+                end if
+                write text "./run.sh"
+            end tell
+        end tell
+        
+    end tell
+    tell application "System Events"
+        set visible of process "iTerm" to true
+    end tell
+end alfred_script</string>
+				<key>cachescript</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.applescript</string>
+			<key>uid</key>
+			<string>7686C74A-A33F-49C2-8231-40F1569A481A</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>output</key>
+				<integer>0</integer>
+				<key>removeextension</key>
+				<false/>
+				<key>sticky</key>
+				<false/>
+				<key>text</key>
+				<string>{query}</string>
+				<key>title</key>
+				<string>Starting tomcat</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>09B2D77C-A000-4BCD-A8FC-2944075CF179</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>output</key>
+				<integer>0</integer>
+				<key>removeextension</key>
+				<false/>
+				<key>sticky</key>
+				<false/>
+				<key>text</key>
+				<string>{query}</string>
+				<key>title</key>
+				<string>Stopping tomcat {query}</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>977D9DF6-D4C5-48E2-A9C1-6A3FB12344BF</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>applescript</key>
+				<string>on alfred_script(q)
+	tell application "iTerm"
+ 		activate
+ 		set myterm to (first terminal)
+ 		tell myterm
+ 			repeat with mysession in sessions
+ 				tell mysession
+ 					set session_name to get name
+ 					if session_name contains q then
+						tell application "System Events" to keystroke "c" using {control down}
+
+						write text "./stop.sh"
+ 					end if
+ 				end tell
+ 			end repeat
+ 		end tell
+ 	end tell
+end alfred_script</string>
+				<key>cachescript</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.applescript</string>
+			<key>uid</key>
+			<string>0780DDAB-DA00-4FC1-9455-5B61A8A3046B</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>stop</string>
+				<key>text</key>
+				<string>stop</string>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>BAFF0BFF-A9A3-44F2-8271-20992129D2AF</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string></string>
+	<key>uidata</key>
+	<dict>
+		<key>0780DDAB-DA00-4FC1-9455-5B61A8A3046B</key>
+		<dict>
+			<key>ypos</key>
+			<real>290</real>
+		</dict>
+		<key>09B2D77C-A000-4BCD-A8FC-2944075CF179</key>
+		<dict>
+			<key>ypos</key>
+			<real>150</real>
+		</dict>
+		<key>43FAF244-BA04-4A7A-BC57-37F994B64970</key>
+		<dict>
+			<key>ypos</key>
+			<real>150</real>
+		</dict>
+		<key>7686C74A-A33F-49C2-8231-40F1569A481A</key>
+		<dict>
+			<key>ypos</key>
+			<real>150</real>
+		</dict>
+		<key>977D9DF6-D4C5-48E2-A9C1-6A3FB12344BF</key>
+		<dict>
+			<key>ypos</key>
+			<real>290</real>
+		</dict>
+		<key>BAFF0BFF-A9A3-44F2-8271-20992129D2AF</key>
+		<dict>
+			<key>ypos</key>
+			<real>290</real>
+		</dict>
+	</dict>
+	<key>webaddress</key>
+	<string>www.maxxton.com</string>
+</dict>
+</plist>
