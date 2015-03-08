@@ -107,38 +107,76 @@ end alfred_script</string>
 			<key>config</key>
 			<dict>
 				<key>argumenttype</key>
-				<integer>0</integer>
+				<integer>1</integer>
 				<key>escaping</key>
-				<integer>127</integer>
+				<integer>63</integer>
 				<key>keyword</key>
 				<string>start</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
-				<true/>
+				<false/>
 				<key>queuedelaymode</key>
 				<integer>0</integer>
 				<key>queuemode</key>
 				<integer>1</integer>
 				<key>runningsubtext</key>
-				<string>loading</string>
+				<string>....</string>
 				<key>script</key>
-				<string>cat&lt;&lt;EOB
-&lt;items&gt;
-  &lt;item uid="book" arg="book" autocomplete="book" type="default"&gt;
-    &lt;title&gt;book&lt;/title&gt;
-	&lt;icon&gt;icon.png&lt;/icon&gt;
-  &lt;/item&gt;
-  &lt;item uid="services" arg="services" autocomplete="services" type="default"&gt;
-    &lt;title&gt;services&lt;/title&gt;
-	&lt;icon&gt;icon.png&lt;/icon&gt;
-  &lt;/item&gt;
-  &lt;item uid="portal" arg="portal" autocomplete="portal" type="default"&gt;
-    &lt;title&gt;portal&lt;/title&gt;
-	&lt;icon&gt;icon.png&lt;/icon&gt;
-  &lt;/item&gt;
-&lt;/items&gt;
-EOB</string>
+				<string>################################################################################
+RESULTS=()
+################################################################################
+# Adds a result to the result array
+# $1 uid
+# $2 arg
+# $3 title
+# $4 subtitle
+# $5 icon
+# $6 valid
+# $7 autocomplete
+###############################################################################
+addResult() {
+  RESULT="&lt;item uid='$(xmlEncode "$1")' arg='$(xmlEncode "$2")' valid='$6' autocomplete='$7'&gt;&lt;title&gt;$(xmlEncode "$3")&lt;/title&gt;&lt;subtitle&gt;$(xmlEncode "$4")&lt;/subtitle&gt;&lt;icon&gt;$(xmlEncode "$5")&lt;/icon&gt;&lt;/item&gt;"
+  RESULTS+=("$RESULT")
+}
+
+###############################################################################
+# Prints the feedback xml to stdout
+###############################################################################
+getXMLResults() {
+  echo "&lt;?xml version='1.0'?&gt;&lt;items&gt;"
+
+  for R in ${RESULTS[*]}; do
+    echo "$R" | tr "\n" " "
+  done
+
+  echo "&lt;/items&gt;"
+}
+
+###############################################################################
+# Escapes XML special characters with their entities
+###############################################################################
+xmlEncode() {
+  echo "$1" | sed -e 's/&amp;/\&amp;amp;/g' -e 's/&gt;/\&amp;gt;/g' -e 's/&lt;/\&amp;lt;/g' -e "s/'/\&amp;apos;/g" -e 's/"/\&amp;quot;/g'
+}
+
+################################################################
+################################################################
+################################################################
+# add items
+if [[ "book" =~ {query}.* ]]; then
+  addResult "book" "book" "Book tomcat" "Book tomcat" "icon.png" "yes" "book"
+fi
+if [[ "services" =~ {query}.* ]]; then
+  addResult "services" "services" "Services tomcat" "Services tomcat" "icon.png" "yes" "services"
+fi
+if [[ "portal" =~ {query}.* ]]; then
+  addResult "portal" "portal" "Portal tomcat" "Portal tomcat" "icon.png" "yes" "portal"
+fi
+
+# get feedback xml
+getXMLResults
+</string>
 				<key>title</key>
 				<string>Start one of my tomcats</string>
 				<key>type</key>
@@ -190,7 +228,7 @@ EOB</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
-				<true/>
+				<false/>
 				<key>queuedelaymode</key>
 				<integer>0</integer>
 				<key>queuemode</key>
@@ -198,19 +236,60 @@ EOB</string>
 				<key>runningsubtext</key>
 				<string>Loading</string>
 				<key>script</key>
-				<string>cat&lt;&lt;EOB
-&lt;items&gt;
-  &lt;item uid="book" arg="book" autocomplete="book" type="default"&gt;
-    &lt;title&gt;book&lt;/title&gt;
-  &lt;/item&gt;
-  &lt;item uid="services" arg="services" autocomplete="services" type="default"&gt;
-    &lt;title&gt;services&lt;/title&gt;
-  &lt;/item&gt;
-  &lt;item uid="portal" arg="portal" autocomplete="portal" type="default"&gt;
-    &lt;title&gt;portal&lt;/title&gt;
-  &lt;/item&gt;
-&lt;/items&gt;
-EOB</string>
+				<string>################################################################################
+RESULTS=()
+################################################################################
+# Adds a result to the result array
+# $1 uid
+# $2 arg
+# $3 title
+# $4 subtitle
+# $5 icon
+# $6 valid
+# $7 autocomplete
+###############################################################################
+addResult() {
+  RESULT="&lt;item uid='$(xmlEncode "$1")' arg='$(xmlEncode "$2")' valid='$6' autocomplete='$7'&gt;&lt;title&gt;$(xmlEncode "$3")&lt;/title&gt;&lt;subtitle&gt;$(xmlEncode "$4")&lt;/subtitle&gt;&lt;icon&gt;$(xmlEncode "$5")&lt;/icon&gt;&lt;/item&gt;"
+  RESULTS+=("$RESULT")
+}
+
+###############################################################################
+# Prints the feedback xml to stdout
+###############################################################################
+getXMLResults() {
+  echo "&lt;?xml version='1.0'?&gt;&lt;items&gt;"
+
+  for R in ${RESULTS[*]}; do
+    echo "$R" | tr "\n" " "
+  done
+
+  echo "&lt;/items&gt;"
+}
+
+###############################################################################
+# Escapes XML special characters with their entities
+###############################################################################
+xmlEncode() {
+  echo "$1" | sed -e 's/&amp;/\&amp;amp;/g' -e 's/&gt;/\&amp;gt;/g' -e 's/&lt;/\&amp;lt;/g' -e "s/'/\&amp;apos;/g" -e 's/"/\&amp;quot;/g'
+}
+
+################################################################
+################################################################
+################################################################
+# add items
+if [[ "book" =~ {query}.* ]]; then
+  addResult "book" "book" "Book tomcat" "Book tomcat" "icon.png" "yes" "book"
+fi
+if [[ "services" =~ {query}.* ]]; then
+  addResult "services" "services" "Services tomcat" "Services tomcat" "icon.png" "yes" "services"
+fi
+if [[ "portal" =~ {query}.* ]]; then
+  addResult "portal" "portal" "Portal tomcat" "Portal tomcat" "icon.png" "yes" "portal"
+fi
+
+# get feedback xml
+getXMLResults
+</string>
 				<key>title</key>
 				<string>Stop tomcat</string>
 				<key>type</key>
@@ -230,22 +309,24 @@ EOB</string>
 			<dict>
 				<key>applescript</key>
 				<string>on alfred_script(q)
-	tell application "iTerm"
- 		activate
- 		set myterm to (first terminal)
- 		tell myterm
- 			repeat with mysession in sessions
- 				tell mysession
- 					set session_name to get name
- 					if session_name contains q then
-						tell application "System Events" to keystroke "c" using {control down}
+  tell application "iTerm"
+    activate
+    set myterm to (first terminal)
+    tell myterm
+      repeat with mysession in sessions
+        tell mysession
+          set session_name to get name
+          if session_name contains q then
+            tell application "System Events" to keystroke "c" using {control down}
 
-						write text "./stop.sh"
- 					end if
- 				end tell
- 			end repeat
- 		end tell
- 	end tell
+            write text "./stop.sh"
+            delay 6
+            tell application "System Events" to keystroke "d" using {control down}
+          end if
+        end tell
+      end repeat
+    end tell
+  end tell
 end alfred_script</string>
 				<key>cachescript</key>
 				<false/>
